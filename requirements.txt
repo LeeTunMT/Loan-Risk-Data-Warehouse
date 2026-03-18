@@ -1,0 +1,23 @@
+# Core Airflow and Providers
+apache-airflow==2.10.2
+apache-airflow-providers-google==10.13.0
+apache-airflow-providers-postgres==5.11.0
+
+# Data Processing & Storage
+pandas==2.2.2
+psycopg2-binary==2.9.9
+pyarrow==15.0.2
+fastparquet==2024.5.0
+# pyspark==3.5.0
+
+# Google Cloud Specifics (Synchronized)
+gcsfs==2024.6.1
+google-cloud-bigquery==3.21.0
+google-cloud-storage==2.16.0
+pandas-gbq==0.22.0
+
+
+
+# Optional: For AWS S3 integration (if needed in the future)
+# pip install apache-airflow-providers-amazon
+# pip install s3fs==2024.6.1
