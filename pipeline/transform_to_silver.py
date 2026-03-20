@@ -140,7 +140,7 @@ def transform_credit_card_balance():
     df.to_gbq(f"{DATASET_SILVER}.credit_card_balance", project_id=PROJECT_ID, if_exists='replace')
 
 def transform_pos_cash_balance():
-    df = pd.read_gbq(f"SELECT * FROM `{PROJECT_ID}.{DATASET_BRONZE}.pos_cash_balance`", project_id=PROJECT_ID)
+    df = pd.read_gbq(f"SELECT * FROM `{PROJECT_ID}.{DATASET_BRONZE}.POS_CASH_balance`", project_id=PROJECT_ID)
     df.columns = df.columns.str.lower()
     df = data_quality_check(df, 'pos_cash_balance')
 
