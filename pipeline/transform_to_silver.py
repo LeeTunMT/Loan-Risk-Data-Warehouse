@@ -102,11 +102,11 @@ def transform_bureau():
     float_cols = df.select_dtypes(include=['float64']).columns
     df[float_cols] = df[float_cols].round(4)
 
-    df['last_credit_date'] = (ANCHOR_DATE + pd.to_timedelta(df['days_credit'], unit='D'))
-    df['date_credit_enddate'] = (ANCHOR_DATE + pd.to_timedelta(df['days_credit_enddate'], unit='D'))
+    df['last_credit_date'] = (ANCHOR_DATE + pd.to_timedelta(df['days_credit'], unit='D')).dt.strftime('%Y-%m-%d')
+    df['date_credit_enddate'] = (ANCHOR_DATE + pd.to_timedelta(df['days_credit_enddate'], unit='D')).dt.strftime('%Y-%m-%d')
     
     df.loc[df['days_credit_update'] > 0, 'days_credit_update'] *= -1
-    df['date_credit_update'] = (ANCHOR_DATE + pd.to_timedelta(df['days_credit_update'], unit='D'))
+    df['date_credit_update'] = (ANCHOR_DATE + pd.to_timedelta(df['days_credit_update'], unit='D')).dt.strftime('%Y-%m-%d')
 
     df['annuity_to_credit_ratio'] = df['amt_annuity'] / df['amt_credit_sum'].replace(0, np.nan)
     
