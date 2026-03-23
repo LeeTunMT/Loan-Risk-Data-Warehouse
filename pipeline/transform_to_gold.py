@@ -16,10 +16,10 @@ DATASET_GOLD = 'gold_stage'
 def transform_application():
 
     # 1. Read Data
-    df = pd.read_gbq(f"SELECT * FROM `{PROJECT_ID}.{DATASET_SILVER}.application`", project=PROJECT_ID)
+    df = pd.read_gbq(f"SELECT * FROM `{PROJECT_ID}.{DATASET_SILVER}.application`", project_id=PROJECT_ID)
     df_app_target = pd.read_gbq(
         f"SELECT * FROM `{PROJECT_ID}.{DATASET_SILVER}.application_target`", 
-        project=PROJECT_ID
+        project_id=PROJECT_ID
     )
     # ---------------------------------------------------------
     # 2. Dimensions Creation
@@ -98,8 +98,8 @@ def transform_application():
     # ---------------------------------------------------------
     
     # For dimensions that were deduplicated, we merge on their features to get the appropriate IDs
-    df = df.merge(dim_date_id_publish, on='date_pub_id', how='left')
-    df = df.merge(dim_date_registration, on='date_reg_id', how='left')
+    df = df.merge(dim_date_id_publish, on='date_id_publish', how='left')
+    df = df.merge(dim_date_registration, on='date_registration', how='left')
     df = df.merge(dim_customer_info, on=info_cols, how='left')
     df = df.merge(dim_customer_asset, on=asset_cols, how='left')
     df = df.merge(dim_customer_place, on=place_cols, how='left')
@@ -163,10 +163,10 @@ def transform_application():
 
 def transform_bureau():
 
-    df_bureau = pd.read_gbq(f"SELECT * FROM `{PROJECT_ID}.{DATASET_SILVER}.bureau`", project=PROJECT_ID)
+    df_bureau = pd.read_gbq(f"SELECT * FROM `{PROJECT_ID}.{DATASET_SILVER}.bureau`", project_id=PROJECT_ID)
     
     # Load the bureau balance table which is already prepared as a dimension
-    df_bb = pd.read_gbq(f"SELECT * FROM `{PROJECT_ID}.{DATASET_SILVER}.bureau_balance`", project=PROJECT_ID)
+    df_bb = pd.read_gbq(f"SELECT * FROM `{PROJECT_ID}.{DATASET_SILVER}.bureau_balance`", project_id=PROJECT_ID)
 
     # dim_credit_status: Captures descriptive attributes about the type and status of the credit
     status_cols = ['credit_active', 'credit_currency', 'credit_type']
@@ -286,7 +286,7 @@ def transform_credit_card_balance():
 
     df_ccb = pd.read_gbq(
         f"SELECT * FROM `{PROJECT_ID}.{DATASET_SILVER}.credit_card_balance`", 
-        project=PROJECT_ID
+        project_id=PROJECT_ID
     )
 
     # dim_cc_status: Captures the status of the credit card contract
@@ -369,7 +369,7 @@ def transform_credit_card_balance():
 def transform_installments_payments():
     df = pd.read_gbq(
         f"SELECT * FROM `{PROJECT_ID}.{DATASET_SILVER}.installments_payments`", 
-        project=PROJECT_ID
+        project_id=PROJECT_ID
     )
     
     # dim_ins_info 
@@ -420,8 +420,8 @@ def transform_installments_payments():
 def transform_previous_applications():
 
     df_prev = pd.read_gbq(
-        f"SELECT * FROM `{PROJECT_ID}.{DATASET_SILVER}.previous_applications`", 
-        project=PROJECT_ID
+        f"SELECT * FROM `{PROJECT_ID}.{DATASET_SILVER}.previous_application`", 
+        project_id=PROJECT_ID
     )
 
     # dim_prev_contract_info: Details about the contract type, status, payment methods, and rejection reasons
@@ -514,7 +514,7 @@ def transform_pos_cash_balance():
 
     df_pos = pd.read_gbq(
         f"SELECT * FROM `{PROJECT_ID}.{DATASET_SILVER}.pos_cash_balance`", 
-        project=PROJECT_ID
+        project_id=PROJECT_ID
     )
 
     df_pos.columns = df_pos.columns.str.lower()
