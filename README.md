@@ -36,7 +36,9 @@ HomeCredit_columns_description.csv
 This file contains descriptions for the columns in the various data files.
 
 <img src = 'image/home_credit.png'>
+
 ## Architecture
+
 <img src ='image/architecture.png'>
 
 ## Pipeline 
