@@ -40,6 +40,7 @@ This file contains descriptions for the columns in the various data files.
 ## Architecture
 
 <img src ='image/architecture.png'>
+
 ## Data Warehouse Pipeline Setup on GCP (Airflow + PySpark)
 
 This guide provides step-by-step instructions for configuring an Apache Airflow environment with PySpark capabilities on a Google Cloud Platform (GCP) Virtual Machine.
