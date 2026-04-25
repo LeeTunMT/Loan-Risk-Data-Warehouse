@@ -6,7 +6,7 @@
   <img src="image/home_credit.png" alt="Home Credit Data Schema" width="800">
 </p>
 
-This project utilizes the Home Credit dataset to build the data warehouse pipeline. The dataset consists of multiple relational tables containing historical loan application and financial history data. 
+This project utilizes the Home Credit dataset to build the data warehouse pipeline. The dataset consists of multiple relational tables containing historical loan application and financial history data. The dataset used in this project is sourced from [HOME CREDIT LINK](https://www.kaggle.com/competitions/home-credit-default-risk/data)
 
 Below is a detailed breakdown of the source data files:
 
