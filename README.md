@@ -39,8 +39,28 @@ This file contains descriptions for the columns in the various data files.
 
 ## Architecture
 
-<img src ='image/architecture.png'>
+<p align="center">
+  <img src="image/architecture.png" alt="Data Warehouse Architecture" width="800">
+</p>
 
+The data pipeline is built natively on Google Cloud Platform (GCP) and follows a **Medallion Architecture** pattern to ensure data quality, scalability, and logical separation of transformations.
+
+### Key Components & Data Flow:
+
+1. **Data Ingestion (Raw Data Layer):** * **Google Cloud Storage (GCS):** Acts as the initial data lake and landing zone for raw data files extracted from source systems.
+
+2. **Orchestration & Compute Engine:**
+   * **Apache Airflow:** Deployed on a **Google Compute Engine (GCE)** virtual machine. It acts as the central orchestrator, scheduling and monitoring all data extraction, loading, and transformation jobs.
+
+3. **Data Warehouse (Google BigQuery):**
+   Data is progressively transformed and promoted through three distinct layers:
+   * **DWH Bronze (Raw):** Unprocessed, historical data ingested directly from GCS.
+   * **DWH Silver (Cleansed):** Data that has been cleaned, filtered, and standardized for structured querying.
+   * **DWH Gold (Curated):** Highly refined, aggregated, and business-level data optimized for analytics and reporting.
+
+4. **BI & Visualization:**
+   * **Looker Studio:** Connects directly to the **DWH Gold** layer to generate interactive dashboards and deliver actionable business insights to end-users.
+   
 ## Data Warehouse Pipeline Setup on GCP (Airflow + PySpark)
 
 This guide provides step-by-step instructions for configuring an Apache Airflow environment with PySpark capabilities on a Google Cloud Platform (GCP) Virtual Machine.
@@ -182,11 +202,29 @@ pkill -f airflow
 ```
 - Production Executors: Ensure you are using LocalExecutor (configured in Step 4) or CeleryExecutor for parallel task execution. SequentialExecutor should never be used in a production environment.
 
+## Results & Performance Comparison
 
-## Pipeline 
+This implementation compares the performance of the data pipeline using a distributed engine (PySpark) versus a traditional single-node processing method (Pandas).
 
-## Result
-This implementation compared the performance between spark engine and traditional processing data method (pandas)
+The results indicate that the run duration using Pandas was a major bottleneck for large datasets. By migrating the data transformations to PySpark, the total execution time was drastically reduced from **58 minutes 6 seconds** down to **8 minutes 17 seconds** (an approximate **7x speedup**).
 
-The result indicated time run duration of pandas too high and when i used pyspark instead, the time performance reduce from 58 minutes 6 seconds to 8 minutes 17 seconds
+### 1. Airflow DAG Graphs
+Structure comparison of the orchestrated pipelines:
+* [DAG Graph - Pandas Implementation](image/dag_graph_pandas.png)
+* [DAG Graph - PySpark Implementation](image/dag_graph_spark.png)
+
+### 2. Total Run Duration
+Comparison of the end-to-end pipeline execution time:
+* **Pandas Engine:** 58m 06s ➡️ [View Run Duration](image/run_duration_pandas.png)
+* **PySpark Engine:** 08m 17s ➡️ [View Run Duration](image/run_duration_spark.png)
+
+### 3. Task-Level Duration
+Detailed breakdowns of individual task execution times within the DAG:
+* [Task Duration Breakdown - Pandas](image/task_duration_pandas.png)
+* [Task Duration Breakdown - PySpark](image/task_duration_spark.png)
+
+---
+**Conclusion:** The benchmark clearly demonstrates PySpark's superiority in handling large-scale data transformations within GCP. The distributed nature of Spark effectively eliminates the memory and compute bottlenecks encountered with Pandas.
+
+## Business Intelligence
 
