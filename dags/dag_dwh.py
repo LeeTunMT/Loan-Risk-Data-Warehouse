@@ -29,10 +29,15 @@ from transform_to_gold import (
 )
 
 with DAG(
-    dag_id="dwh_pipeline_parallel",
-    start_date=datetime(2026, 3, 22),
+    dag_id="dwh_pipeline_pandas_parallel",
+    start_date=datetime(2026, 3, 21),
     schedule_interval=None,
     catchup=False,
+    max_active_tasks=3,
+    # default_args = {
+    # 'retries': 2,
+    # 'retry_delay': timedelta(minutes=5),
+    # },
     description='Run full parallel pipeline for Home Credit data',
     tags=['home_credit', 'bronze', 'silver', 'gold', 'Data Warehouse'],
 ) as dag:
@@ -76,7 +81,7 @@ with DAG(
         task_transform_previous_app_silver()
     ]
 
-    # CHECKPOINT: Wait for ALL Silver tasks to finish
+    # CHECKPOINT
     wait_for_silver_stage = EmptyOperator(task_id="WAIT_FOR_SILVER_STAGE")
 
     # STAGE 3
@@ -108,18 +113,13 @@ with DAG(
         task_transform_poscash_gold()
     ]
 
-    # CHECKPOINT: Pipeline Complete
     pipeline_complete = EmptyOperator(task_id="PIPELINE_COMPLETE")
 
-    # RUN DEPEND
-    # 1. Extract runs first, then triggers all Silver tasks simultaneously
+    # Extract runs first, then triggers all Silver tasks simultaneously
     extract >> silver_tasks 
     
-    # 2. ALL Silver tasks must finish before hitting the "Wait" checkpoint
     silver_tasks >> wait_for_silver_stage
     
-    # 3. Once Silver is 100% done, trigger all Gold tasks simultaneously
     wait_for_silver_stage >> gold_tasks
     
-    # 4. Mark pipeline as complete once all Gold tasks finish
     gold_tasks >> pipeline_complete
